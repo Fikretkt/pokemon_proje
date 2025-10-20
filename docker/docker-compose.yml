@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  web:
+    image: php:8.2-apache
+    # Host modu, port eşleştirmesini kaldırır ve konteynerin 80. portunu doğrudan Host'un 80. portuna map'ler.
+    # Bu, tüm yerel ağ sorunlarını bypass eder.
+    network_mode: host
+    volumes:
+      - ../:/var/www/html
+    # depends_on kaldırıldı.
+
+  db:
+    image: mariadb:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=123456
+      - MYSQL_DATABASE=pokedoc
+      - MYSQL_USER=phpstorm
+      - MYSQL_PASSWORD=123456
+    volumes:
+      - db_data:/var/lib/mysql
+    # DB'ye localhost üzerinden erişmek için 3306 portunu Host'a açıyoruz
+    ports:
+      - '3306:3306'
+
+volumes:
+  db_data:
